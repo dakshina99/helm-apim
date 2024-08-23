@@ -11,7 +11,7 @@
 
 aws:
   # -- If AWS is used as the cloud provider
-  enabled: true
+  enabled: false
   efs:
     # -- EFS capacity
     capacity: ""
@@ -175,8 +175,8 @@ kubernetes:
       annotations:
   securityContext:
     # -- User ID of the container
-    runAsUser: 802
-    runAsGroup: 802
+    runAsUser: 10001
+    runAsGroup: 10001
 
 
 wso2:  
@@ -225,18 +225,18 @@ wso2:
       adminPassword: "admin"
       databases:
         # -- Database type. eg: mysql, oracle, mssql, postgres
-        type: ""
+        type: "postgres"
         jdbc:
           # -- JDBC driver class name
-          driver: ""
+          driver: "org.postgresql.Driver"
         # -- APIM APIMDB configurations. This is required for gateway only in a multi-tenancy scenario
         apim_db:
           # -- APIM APIMDB URL
-          url: ""
+          url: "jdbc:postgresql://<HOST>:5432/apim_db"
           # -- APIM APIMDB username
-          username: ""
+          username: "<USERNAME"
           # -- APIM APIMDB password
-          password: ""
+          password: "<PASSWORD>"
           # -- APIM database JDBC pool parameters
           poolParameters:
             defaultAutoCommit: false
@@ -248,11 +248,11 @@ wso2:
             minIdle: 5
         shared_db:
           # -- APIM SharedDB URL
-          url: ""
+          url: "jdbc:postgresql://<HOST>:5432/shared_db"
           # -- APIM SharedDB username
-          username: ""
+          username: "<USERNAME>"
           # -- APIM SharedDB password
-          password: ""
+          password: "<PASSWORD>"
           # -- APIM database JDBC pool parameters
           poolParameters:
             defaultAutoCommit: false
@@ -271,7 +271,7 @@ wso2:
 
       security:
         # -- Kubernetes secret containing the keystores and truststore
-        jksSecretName: ""
+        jksSecretName: "<SECRET NAME>"
         keystores:
           primary:
             # -- Primary keystore enabled
@@ -310,7 +310,7 @@ wso2:
           # -- Truststore name
           name: "client-truststore.jks"
           # -- Truststore password
-          password: ""
+          password: "wso2carbon"
 
       gateway:
         # -- APIM Gateway environments
@@ -543,11 +543,11 @@ wso2:
     # Container image configurations
     image:
       # -- Registry containing the image
-      registry: ""
+      registry: "docker.io"
       # -- Repository name consisting the image
-      repository: ""
+      repository: "<REMOTE>/<REPO>"
       # -- Docker image digest
-      digest: ""
+      digest: "<DIGEST>"
       # -- Refer to the Kubernetes documentation on updating images (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       imagePullPolicy: Always
 
@@ -619,3 +619,30 @@ wso2:
           carbonDatabase: 50M
           # -- For persisting the indexed solr data
           solrIndexedData: 50M
+
+  multidc:
+    asyncWebhookDataPublisher:
+      - name: async-webhook-region-1
+        propertiesFile: "repository/conf/jndi-region-1.properties"
+
+    keymgtDataPublisher:
+      - name: keymgt-event-region-1
+        propertiesFile: "repository/conf/jndi-region-1.properties"
+
+    notificationDataPublisher:
+      - name: notification-region-1
+        propertiesFile: "repository/conf/jndi-region-1.properties"
+
+    blockingDataPublisher:
+      - name: blocking-region-1
+        propertiesFile: "repository/conf/jndi-region-1.properties"
+
+    tokenRevocationDataPublisher:
+      - name: token-revocation-region-1
+        propertiesFile: "repository/conf/jndi-region-1.properties"
+
+    customJndiProperties:
+      - name: jndi-region-1
+        properties:
+          host: "<HOST>"
+          port: "<PORT>"
