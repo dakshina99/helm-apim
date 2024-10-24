@@ -11,7 +11,7 @@
 
 aws:
   # -- If AWS is used as the cloud provider
-  enabled: true
+  enabled: false
   ecr:
     # -- AWS Elastic Container Registry name
     registry: ""
@@ -83,14 +83,14 @@ gcp:
 kubernetes:
   securityContext:
     # -- User ID of the container
-    runAsUser: 802
+    runAsUser: 10001
   # -- Enable AppArmor profiles for the deployment
   enableAppArmor: false
 
 wso2:  
   apim:
     # -- APIM version
-    version: "4.4.0"
+    version: "4.4.0-beta"
     # -- Secure vauld enabled
     secureVaultEnabled: false
     # Logging related configurations
@@ -113,23 +113,23 @@ wso2:
         properties:
           key: value
       # -- Super admin username
-      adminUsername: ""
+      adminUsername: "admin"
       # -- Super admin password
-      adminPassword: ""
+      adminPassword: "admin"
       databases:
         # -- Database type. eg: mysql, oracle, mssql, postgres
-        type: ""
+        type: "postgres"
         jdbc:
           # -- JDBC driver class name
-          driver: ""
+          driver: "org.postgresql.Driver"
         # -- APIM AM_DB configurations.
         apim_db:
           # -- APIM AM_DB URL
-          url: ""
+          url: "jdbc:postgresql://pattern2-db.postgres.database.azure.com:5432/apim_db"
           # -- APIM AM_DB username
-          username: ""
+          username: "p2admin"
           # -- APIM AM_DB password
-          password: ""
+          password: "Abcd@1234"
           # -- APIM database JDBC pool parameters
           poolParameters:
             defaultAutoCommit: false
@@ -142,11 +142,11 @@ wso2:
         # -- APIM SharedDB configurations.
         shared_db:
           # -- APIM SharedDB URL
-          url: ""
+          url: "jdbc:postgresql://pattern2-db.postgres.database.azure.com:5432/shared_db"
           # -- APIM SharedDB username
-          username: ""
+          username: "p2admin"
           # -- APIM SharedDB password
-          password: ""
+          password: "Abcd@1234"
           # -- APIM shared database JDBC pool parameters
           poolParameters:
             defaultAutoCommit: false
@@ -159,7 +159,7 @@ wso2:
 
       security:
         # -- Kubernetes secret containing the keystores and truststore
-        jksSecretName: "apim-keystore-secret"
+        jksSecretName: "jks-secret"
         keystores:
           primary:
             # -- Primary keystore enabled
@@ -180,9 +180,9 @@ wso2:
             # -- TLS keystore alias
             alias: "wso2carbon"
             # -- TLS keystore password
-            password: ""
+            password: "wso2carbon"
             # -- TLS keystore key password
-            keyPassword: ""
+            keyPassword: "wso2carbon"
           internal:
             # -- Internal keystore enabled
             enabled: false
@@ -198,7 +198,7 @@ wso2:
           # -- Truststore name
           name: "client-truststore.jks"
           # -- Truststore password
-          password: ""
+          password: "wso2carbon"
 
       km:
         # -- Key manager service name if default Resident KM is used
@@ -212,11 +212,11 @@ wso2:
 
       eventhub:
         # -- Event hub (control plane) loadbalancer service url
-        serviceUrl: "wso2am-cp-service"
+        serviceUrl: "apim1-wso2am-cp-service"
         # -- Event hub service urls
         urls:
-          - "wso2am-cp-1-service"
-          - "wso2am-cp-2-service"
+          - "apim1-wso2am-cp-1-service"
+          - "apim1-wso2am-cp-2-service"
 
       # APIM OAuth configurations
       oauth_config:
@@ -252,11 +252,11 @@ wso2:
     # Container image configurations
     image:
       # -- Container registry hostname
-      registry: ""
+      registry: "docker.io"
       # -- Azure ACR repository name consisting the image
-      repository: ""
+      repository: "dakshina99/wso2am"
       # -- Docker image digest
-      digest: ""
+      digest: "sha256:aba28ecdd874db58f82775af896f3da6e9e12e86dcd143797e4387efd774e6bc"
       # -- Refer to the Kubernetes documentation on updating images (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       imagePullPolicy: Always
 
