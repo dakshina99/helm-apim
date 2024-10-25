@@ -233,7 +233,7 @@ wso2:
 
       km:
         # -- Key manager service name if default Resident KM is used
-        serviceUrl: "wso2am-cp-service"
+        serviceUrl: "p2-cp-wso2am-cp-service"
 
       iskm:
         # If Identity Server is used as the Resident KM

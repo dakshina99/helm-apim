@@ -193,6 +193,10 @@ login_username_case_insensitive = {{ .Values.wso2.apim.configurations.devportal.
 enable_key_provisioning = {{ .Values.wso2.apim.configurations.devportal.enableKeyProvisioning }}
 {{- end }}
 
+[qpid.heartbeat]
+delay = 60
+timeout_factor = 2.0
+
 [apim.event_hub]
 enable = true
 username = "$ref{super_admin.username}"

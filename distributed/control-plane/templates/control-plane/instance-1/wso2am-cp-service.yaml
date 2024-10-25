@@ -14,6 +14,9 @@ kind: Service
 metadata:
   name: {{ template "apim-helm-cp.fullname" . }}-1-service
   namespace : {{ .Release.Namespace }}
+  annotations:
+    service.beta.kubernetes.io/port_{{ add 9611 .Values.wso2.apim.portOffset }}_no_lb_rule: "true"
+    service.beta.kubernetes.io/port_{{ add 9711 .Values.wso2.apim.portOffset }}_no_lb_rule: "true"
 spec:
   # label keys and values that must match in order to receive traffic for this service
   selector:
