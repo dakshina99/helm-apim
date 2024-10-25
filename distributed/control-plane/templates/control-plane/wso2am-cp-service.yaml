@@ -26,3 +26,4 @@ spec:
     - name: servlet-https
       protocol: TCP
       port: {{ add 9443 .Values.wso2.apim.portOffset }}
+  type: LoadBalancer
