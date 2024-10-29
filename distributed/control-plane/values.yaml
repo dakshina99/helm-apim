@@ -11,7 +11,7 @@
 
 aws:
   # -- If AWS is used as the cloud provider
-  enabled: true
+  enabled: false
   efs:
     # -- EFS capacity
     capacity: ""
@@ -167,7 +167,7 @@ kubernetes:
 
   securityContext:
     # -- User ID of the container
-    runAsUser: 802
+    runAsUser: 10001
   # -- Enable AppArmor profiles for the deployment
   enableAppArmor: false
 
@@ -198,25 +198,24 @@ wso2:
         type: "database_unique_id"
         # -- User store properties
         properties:
-          key: value
       # -- Super admin username
-      adminUsername: ""
+      adminUsername: "admin"
       # -- Super admin password
-      adminPassword: ""
+      adminPassword: "admin"
       databases:
         # -- Database type. eg: mysql, oracle, mssql, postgres
-        type: ""
+        type: "postgres"
         jdbc:
           # -- JDBC driver class name
-          driver: ""
+          driver: "org.postgresql.Driver"
         # -- APIM AM_DB configurations.
         apim_db:
           # -- APIM AM_DB URL
-          url: ""
+          url: "jdbc:postgresql://74.225.222.27:5432/apim_db"
           # -- APIM AM_DB username
-          username: ""
+          username: "postgres"
           # -- APIM AM_DB password
-          password: ""
+          password: "password"
           # -- APIM database JDBC pool parameters
           poolParameters:
             defaultAutoCommit: false
@@ -229,11 +228,11 @@ wso2:
         # -- APIM SharedDB configurations.
         shared_db:
           # -- APIM SharedDB URL
-          url: ""
+          url: "jdbc:postgresql://74.225.222.27:5432/shared_db"
           # -- APIM SharedDB username
-          username: ""
+          username: "postgres"
           # -- APIM SharedDB password
-          password: ""
+          password: "password"
           # -- APIM shared database JDBC pool parameters
           poolParameters:
             defaultAutoCommit: false
@@ -252,7 +251,7 @@ wso2:
 
       security:
         # -- Kubernetes secret containing the keystores and truststore
-        jksSecretName: "apim-keystore-secret"
+        jksSecretName: "jks-secret"
         keystores:
           primary:
             # -- Primary keystore enabled
@@ -273,9 +272,9 @@ wso2:
             # -- TLS keystore alias
             alias: "wso2carbon"
             # -- TLS keystore password
-            password: ""
+            password: "wso2carbon"
             # -- TLS keystore key password
-            keyPassword: ""
+            keyPassword: "wso2carbon"
           internal:
             # -- Internal keystore enabled
             enabled: false
@@ -291,7 +290,7 @@ wso2:
           # -- Truststore name
           name: "client-truststore.jks"
           # -- Truststore password
-          password: ""
+          password: "wso2carbon"
       
       gateway:
         # -- APIM Gateway environments
@@ -380,11 +379,11 @@ wso2:
     # Container image configurations
     image:
       # -- Container registry hostname
-      registry: ""
+      registry: "docker.io"
       # -- Azure ACR repository name consisting the image
-      repository: ""
+      repository: "dakshina99/wso2am"
       # -- Docker image digest
-      digest: ""
+      digest: "sha256:aba28ecdd874db58f82775af896f3da6e9e12e86dcd143797e4387efd774e6bc"
       # -- Refer to the Kubernetes documentation on updating images (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       imagePullPolicy: Always
 
@@ -463,3 +462,50 @@ wso2:
           carbonDatabase: 50M
           # -- For persisting the indexed solr data
           solrIndexedData: 50M
+
+  multidc:
+    asyncWebhookDataPublisher:
+      - name: async-webhook-region-cp-1
+        propertiesFile: "repository/conf/jndi-region-cp-1.properties"
+
+      - name: async-webhook-region-cp-2
+        propertiesFile: "repository/conf/jndi-region-cp-2.properties"
+
+    keymgtDataPublisher:
+      - name: keymgt-event-region-cp-1
+        propertiesFile: "repository/conf/jndi-region-cp-1.properties"
+
+      - name: keymgt-event-region-cp-2
+        propertiesFile: "repository/conf/jndi-region-cp-2.properties"
+
+    notificationDataPublisher:
+      - name: notification-region-cp-1
+        propertiesFile: "repository/conf/jndi-region-cp-1.properties"
+
+      - name: notification-region-cp-2
+        propertiesFile: "repository/conf/jndi-region-cp-2.properties"
+
+    blockingDataPublisher:
+      - name: blocking-region-cp-1
+        propertiesFile: "repository/conf/jndi-region-cp-1.properties"
+
+      - name: blocking-region-cp-2
+        propertiesFile: "repository/conf/jndi-region-cp-2.properties"
+
+    tokenRevocationDataPublisher:
+      - name: token-revocation-region-cp-1
+        propertiesFile: "repository/conf/jndi-region-cp-1.properties"
+
+      - name: token-revocation-region-cp-2
+        propertiesFile: "repository/conf/jndi-region-cp-2.properties"
+
+    customJndiProperties:
+      - name: jndi-region-cp-1
+        properties:
+          host: "57.155.25.40"
+          port: "5672"
+
+      - name: jndi-region-cp-2
+        properties:
+          host: "57.155.25.115"
+          port: "5672"
