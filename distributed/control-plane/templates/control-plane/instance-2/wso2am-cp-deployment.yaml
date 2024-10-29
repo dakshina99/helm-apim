@@ -32,6 +32,12 @@ spec:
         checksum.am.cp.conf: {{ include (print $.Template.BasePath "/control-plane/instance-2/wso2am-cp-conf.yaml") . | sha256sum }}
         checksum.am.cp.conf.log4j2: {{ include (print $.Template.BasePath "/control-plane/wso2am-cp-conf-log4j2.yaml") . | sha256sum }}
         checksum.am.cp.conf.secret: {{ include (print $.Template.BasePath "/control-plane/wso2am-cp-conf-secret-conf.yaml") . | sha256sum }}
+        checksum.am.cp.conf.jndi.properties: {{ include (print $.Template.BasePath "/control-plane/wso2am-cp-conf-jndi-properties.yaml") . | sha256sum }}
+        checksum.am.cp.eventpublishers.async.webhook: {{ include (print $.Template.BasePath "/control-plane/wso2am-cp-async-webhook-event-publisher.yaml") . | sha256sum }}
+        checksum.am.cp.eventpublishers.keymgt: {{ include (print $.Template.BasePath "/control-plane/wso2am-cp-keymgt-event-publisher.yaml") . | sha256sum }}
+        checksum.am.cp.eventpublishers.notification: {{ include (print $.Template.BasePath "/control-plane/wso2am-cp-notification-event-publisher.yaml") . | sha256sum }}
+        checksum.am.cp.eventpublishers.token.revocation: {{ include (print $.Template.BasePath "/control-plane/wso2am-cp-token-revocation-event-publisher.yaml") . | sha256sum }}
+        checksum.am.cp.eventpublishers.blocking: {{ include (print $.Template.BasePath "/control-plane/wso2am-cp-blocking-event-publisher.yaml") . | sha256sum }}
       labels:
         deployment: {{ template "apim-helm-cp.fullname" . }}
         node: {{ template "apim-helm-cp.fullname" . }}-2
@@ -149,6 +155,36 @@ spec:
           mountPath: /home/wso2carbon/wso2-config-volume/bin/api-manager.sh
           subPath: api-manager.sh
         {{- end }}
+        {{- range .Values.wso2.multidc.asyncWebhookDataPublisher }}
+        - name: wso2-control-plane-eventpublishers-async-webhook
+          mountPath: /home/wso2carbon/wso2-config-volume/repository/deployment/server/eventpublishers/{{ .name }}.xml
+          subPath: {{ .name }}.xml
+        {{- end }}
+        {{- range .Values.wso2.multidc.keymgtDataPublisher }}
+        - name: wso2-control-plane-eventpublishers-keymgt
+          mountPath: /home/wso2carbon/wso2-config-volume/repository/deployment/server/eventpublishers/{{ .name }}.xml
+          subPath: {{ .name }}.xml
+        {{- end }}
+        {{- range .Values.wso2.multidc.notificationDataPublisher }}
+        - name: wso2-control-plane-eventpublishers-notification
+          mountPath: /home/wso2carbon/wso2-config-volume/repository/deployment/server/eventpublishers/{{ .name }}.xml
+          subPath: {{ .name }}.xml
+        {{- end }}
+        {{- range .Values.wso2.multidc.blockingDataPublisher }}
+        - name: wso2-control-plane-eventpublishers-blocking
+          mountPath: /home/wso2carbon/wso2-config-volume/repository/deployment/server/eventpublishers/{{ .name }}.xml
+          subPath: {{ .name }}.xml
+        {{- end }}
+        {{- range .Values.wso2.multidc.tokenRevocationDataPublisher }}
+        - name: wso2-control-plane-eventpublishers-token-revocation
+          mountPath: /home/wso2carbon/wso2-config-volume/repository/deployment/server/eventpublishers/{{ .name }}.xml
+          subPath: {{ .name }}.xml
+        {{- end }}
+        {{- range .Values.wso2.multidc.customJndiProperties }}
+        - name: wso2-control-plane-jndi-properties
+          mountPath: /home/wso2carbon/wso2-config-volume/repository/conf/{{ .name }}.properties
+          subPath: {{ .name }}.properties
+        {{- end }}
         {{- if .Values.wso2.apim.secureVaultEnabled }}
         - name: wso2am-control-plane-secret-conf
           mountPath: /home/wso2carbon/wso2-config-volume/repository/conf/security/secret-conf.properties
@@ -206,6 +242,30 @@ spec:
           name: {{ template "apim-helm-cp.fullname" . }}-conf-sh
           defaultMode: 0407
       {{- end }}
+      - name: wso2-control-plane-eventpublishers-async-webhook
+        configMap:
+          name: {{ template "apim-helm-cp.fullname" . }}-conf-async-webhook-event-publisher
+          defaultMode: 0407
+      - name: wso2-control-plane-eventpublishers-keymgt
+        configMap:
+          name: {{ template "apim-helm-cp.fullname" . }}-conf-keymgt-event-publisher
+          defaultMode: 0407
+      - name: wso2-control-plane-eventpublishers-notification
+        configMap:
+          name: {{ template "apim-helm-cp.fullname" . }}-conf-notification-event-publisher
+          defaultMode: 0407
+      - name: wso2-control-plane-eventpublishers-blocking
+        configMap:
+          name: {{ template "apim-helm-cp.fullname" . }}-conf-blocking-event-publisher
+          defaultMode: 0407
+      - name: wso2-control-plane-eventpublishers-token-revocation
+        configMap:
+          name: {{ template "apim-helm-cp.fullname" . }}-conf-token-revocation-event-publisher
+          defaultMode: 0407
+      - name: wso2-control-plane-jndi-properties
+        configMap:
+          name: {{ template "apim-helm-cp.fullname" . }}-conf-jndi-properties
+          defaultMode: 0407
       {{- if .Values.wso2.apim.secureVaultEnabled }}
       - name: wso2am-control-plane-secret-conf
         configMap:

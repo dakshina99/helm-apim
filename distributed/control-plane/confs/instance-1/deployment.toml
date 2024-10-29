@@ -213,10 +213,15 @@ login_username_case_insensitive = {{ .Values.wso2.apim.configurations.devportal.
 enable_key_provisioning = {{ .Values.wso2.apim.configurations.devportal.enableKeyProvisioning }}
 {{- end }}
 
+[qpid.heartbeat]
+delay = 60
+timeout_factor = 2.0
+
 [apim.event_hub]
 enable = true
 username = "$ref{super_admin.username}"
 password = "$ref{super_admin.password}"
+EventWaitingTime = 15000
 service_url = "https://{{ template "apim-helm-cp.fullname" . }}-service:{{ add 9443 .Values.wso2.apim.portOffset }}/services/"
 event_listening_endpoints = ["tcp://localhost:{{ add 5672 .Values.wso2.apim.portOffset }}"]
 {{- if .Values.wso2.deployment.highAvailability }}
