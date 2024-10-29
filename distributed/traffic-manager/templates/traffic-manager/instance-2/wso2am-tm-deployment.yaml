@@ -225,4 +225,14 @@ spec:
       - name: wso2am-traffic-manager-keystores
         secret:
           secretName: {{ .Values.wso2.apim.configurations.security.jksSecretName }}
+      hostAliases:
+        - ip: "57.155.75.42"
+          hostnames:
+            - "pattern2.region1.cp.am.wso2.com"
+        - ip: "57.155.74.179"
+          hostnames:
+            - "pattern2.region1.cp1.am.wso2.com"
+        - ip: "57.155.74.234"
+          hostnames:
+            - "pattern2.region1.cp2.am.wso2.com"
 {{- end }}

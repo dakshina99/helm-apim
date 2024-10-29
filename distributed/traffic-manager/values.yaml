@@ -111,7 +111,7 @@ wso2:
         type: "database_unique_id"
         # -- User store properties
         properties:
-          key: value
+
       # -- Super admin username
       adminUsername: "admin"
       # -- Super admin password
@@ -202,7 +202,7 @@ wso2:
 
       km:
         # -- Key manager service name if default Resident KM is used
-        serviceUrl: "wso2am-cp-service"
+        serviceUrl: "pattern2.region1.cp.am.wso2.com"
 
       iskm:
         # If Identity Server is used as the Resident KM
@@ -212,11 +212,11 @@ wso2:
 
       eventhub:
         # -- Event hub (control plane) loadbalancer service url
-        serviceUrl: "apim1-wso2am-cp-service"
+        serviceUrl: "pattern2.region1.cp.am.wso2.com"
         # -- Event hub service urls
         urls:
-          - "apim1-wso2am-cp-1-service"
-          - "apim1-wso2am-cp-2-service"
+          - "pattern2.region1.cp1.am.wso2.com"
+          - "pattern2.region1.cp2.am.wso2.com"
 
       # APIM OAuth configurations
       oauth_config:
@@ -292,17 +292,17 @@ wso2:
     # Indicates whether the container is running
     livenessProbe:
       # -- Number of seconds after the container has started before liveness probes are initiated
-      initialDelaySeconds: 60
+      initialDelaySeconds: 150
       # -- How often (in seconds) to perform the probe
-      periodSeconds: 10
+      periodSeconds: 20
       # -- Minimum consecutive successes for the probe to be considered successful after having failed
       failureThreshold: 3
     # Indicates whether the container is ready to service requests
     readinessProbe:
       # -- Number of seconds after the container has started before readiness probes are initiated
-      initialDelaySeconds: 60
+      initialDelaySeconds: 150
       # -- How often (in seconds) to perform the probe
-      periodSeconds: 10
+      periodSeconds: 20
       # -- Minimum consecutive successes for the probe to be considered successful after having failed
       failureThreshold: 3
     
